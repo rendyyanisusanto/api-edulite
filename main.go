@@ -2,8 +2,10 @@ package main
 
 import (
 	"edulite-api/database"
-
 	"edulite-api/routes"
+	"time"
+
+	"github.com/gin-contrib/cors"
 
 	"github.com/gin-gonic/gin"
 
@@ -25,13 +27,21 @@ import (
 func main() {
 	r := gin.Default()
 	database.InitDB()
-
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"}, // Ganti dengan domain tertentu jika perlu
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Authorization", "Content-Type"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Auth
 	routes.AuthRoutes(r)
 
 	routes.SiswaRoutes(r)
+	routes.SklRoutes(r)
 
 	r.Run(":5555")
 }
