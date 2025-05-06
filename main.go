@@ -40,8 +40,10 @@ func main() {
 	// Auth
 	routes.AuthRoutes(r)
 
+	routes.GuruRoutes(r)
 	routes.SiswaRoutes(r)
 	routes.SklRoutes(r)
+	routes.PoinPelanggaran(r)
 
 	r.Run(":5555")
 }
