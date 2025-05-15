@@ -28,13 +28,18 @@ func main() {
 	r := gin.Default()
 	database.InitDB()
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"}, // Ganti dengan domain tertentu jika perlu
+		AllowOrigins:     []string{"http://192.168.100.99:5173"}, // Ganti dengan domain tertentu jika perlu
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Authorization", "Content-Type"},
 		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
+		AllowCredentials: false,
 		MaxAge:           12 * time.Hour,
 	}))
+
+	r.OPTIONS("/*path", func(c *gin.Context) {
+		c.Status(204)
+	})
+
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Auth
@@ -44,6 +49,7 @@ func main() {
 	routes.SiswaRoutes(r)
 	routes.SklRoutes(r)
 	routes.PoinPelanggaran(r)
+	routes.PresensiRFIDRoutes(r)
 	routes.LoginRoutes(r)
 
 	r.Run(":5555")
