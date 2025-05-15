@@ -44,6 +44,7 @@ func main() {
 	routes.SiswaRoutes(r)
 	routes.SklRoutes(r)
 	routes.PoinPelanggaran(r)
+	routes.LoginRoutes(r)
 
 	r.Run(":5555")
 }

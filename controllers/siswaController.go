@@ -24,7 +24,7 @@ func GetSiswaByNISN(c *gin.Context) {
 	nisn := c.Param("nisn")
 
 	var siswa models.Siswa
-	if err := db.Where("nisn = ?", nisn).First(&siswa).Error; err != nil {
+	if err := db.Preload("Kelas").Preload("Jurusan").Where("nisn = ?", nisn).First(&siswa).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"message": "Siswa tidak ditemukan"})
 		return
 	}
@@ -35,8 +35,22 @@ func GetAllSiswa(c *gin.Context) {
 	db := database.DB
 
 	var siswa []models.Siswa
-	if err := db.Limit(20).Find(&siswa).Error; err != nil {
+	if err := db.Preload("Kelas").Preload("Jurusan").Limit(20).Find(&siswa).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Message": "Gagal mengambil data"})
+		return
+	}
+
+	c.JSON(http.StatusOK, siswa)
+}
+
+func GetSiswaByID(c *gin.Context) {
+	db := database.DB
+
+	id := c.Param("id")
+
+	var siswa models.Siswa
+	if err := db.Preload("Kelas").Preload("Jurusan").First(&siswa, "id_siswa = ?", id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Siswa tidak ditemukan"})
 		return
 	}
 
