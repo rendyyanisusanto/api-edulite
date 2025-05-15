@@ -28,11 +28,11 @@ func main() {
 	r := gin.Default()
 	database.InitDB()
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://192.168.100.99:5173"}, // Ganti dengan domain tertentu jika perlu
+		AllowOrigins:     []string{"*"}, // Ganti dengan domain tertentu jika perlu
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Authorization", "Content-Type"},
 		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: false,
+		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
 
