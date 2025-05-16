@@ -31,7 +31,7 @@ func GetPresenceInToday(c *gin.Context) {
 	idsiswa_fk := c.Param("id")
 
 	var presensi_rfid []models.PresensiRFID
-	if err := db.Where("idsiswa_fk = ?", idsiswa_fk).Where("status = 'MASUK'").First(&presensi_rfid).Error; err != nil {
+	if err := db.Where("idsiswa_fk = ?", idsiswa_fk).Where("status = 'MASUK'").Last(&presensi_rfid).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Message": "Gagal mengambil data"})
 		return
 	}
